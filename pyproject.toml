@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "terse"
+version = "0.1.0"
+description = "Micro-Terse: a proof-of-concept ternary-weight language model"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "torch>=2.3",
+    "numpy",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+data = ["transformers", "datasets", "tqdm", "safetensors"]
+eval = ["lm-eval"]
+export = ["gguf"]
+serve = ["fastapi", "uvicorn", "pydantic", "transformers", "httpx"]
+cli = ["httpx", "rich"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["terse*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
