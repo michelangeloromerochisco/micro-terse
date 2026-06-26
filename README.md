@@ -17,7 +17,7 @@
 **Micro-Terse** is a 423M-parameter (≈320M active) **ternary-weight** language model trained from
 scratch in pure PyTorch on a single GPU. Its weights are constrained to `{-1, 0, +1}` (≈1.58 bits),
 so the model quantizes **losslessly** to a **182 MB `TQ2_0` GGUF** that runs on a commodity CPU
-with no GPU. The whole run — pretraining, SFT, and ORPO — cost about **$127**.
+with no GPU. The whole run — pretraining, SFT, and ORPO — cost about **$150**.
 
 It is a research proof-of-concept, **not** a production assistant. At an 8B-token budget the model
 is data-limited: fluent for a clause or two, near chance on knowledge benchmarks. The point is
@@ -30,7 +30,7 @@ train and run on owned hardware.
 - **Clean-room architecture and ternary operator** — derived from, but not copied from, prior 1-bit work.
 - **Lossless 182 MB GGUF** — `TQ2_0` packing is exact because the weights are already `{-1, 0, +1}`.
 - **CPU-only inference** via a small `llama.cpp` fork (custom `terse` architecture).
-- **Trained from scratch for ≈$127** on a single RTX A6000 (48 GB).
+- **Trained from scratch for ≈$150** on a single RTX A6000 (48 GB).
 
 ### Model Variants
 
@@ -125,7 +125,7 @@ Apache-2.0. See [`LICENSE`](LICENSE).
 
 ```bibtex
 @techreport{romerochisco2026tersemicro,
-  title  = {Terse-Micro: A 423M-Parameter Ternary-Weight Language Model Trained From Scratch for \$127},
+  title  = {Terse-Micro: A 423M-Parameter Ternary-Weight Language Model Trained From Scratch for \$150},
   author = {Romero Chisco, Michelangelo},
   year   = {2026},
   note   = {Apache-2.0. github.com/michelangeloromerochisco/micro-terse}

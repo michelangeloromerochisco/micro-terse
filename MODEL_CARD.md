@@ -1,6 +1,6 @@
 # Model Card — Terse-Micro
 
-> A 423M-parameter, ternary-weight {−1, 0, +1} language model trained from scratch for ~$127,
+> A 423M-parameter, ternary-weight {−1, 0, +1} language model trained from scratch for ~$150,
 > deployable as a 182 MB CPU-only model. First tier of the **Terse family**.
 
 - **Developer:** Michelangelo Romero Chisco (independent), 2026
@@ -38,7 +38,7 @@ Config: `configs/micro-trained.yaml` (the as-trained 423M; `configs/micro.yaml` 
 | Pretraining | 8 B tokens, FineWeb-grade web text; AdamW (β 0.9/0.95, wd 0.1); LR 3e-4 → 3e-5 cosine, 2000 warmup; 488,282 steps; batch 4 × seq 4096; bf16; MTP aux weight 0.1 |
 | SFT | 3 epochs, 44,558 ChatML conversations, prompt-masked loss, AdamW, grad-accum 16, seq 1024 |
 | ORPO | 1 epoch, ~3,500 identity/charter preference pairs, Adafactor LR 1e-5, reference-free |
-| Hardware | 1× RTX A6000 48 GB (RunPod), ≈250 GPU-hours, **≈$127 total** |
+| Hardware | 1× RTX A6000 48 GB (RunPod), ≈250 GPU-hours, **≈$150 total** |
 | Export | F32 GGUF (lossless for ternary) → `TQ2_0` ≈ **182 MB** |
 
 Released checkpoints: `terse-micro-base.gguf` (pretrained LM), `terse-micro-sft.gguf` (chat), `terse-micro-orpo.gguf` (identity-aligned).
@@ -73,7 +73,7 @@ See the [README](README.md). In short: serve `terse-micro-sft.gguf` (chat), with
 
 ```
 @techreport{romerochisco2026tersemicro,
-  title  = {Terse-Micro: A 423M-Parameter Ternary-Weight Language Model Trained From Scratch for \$127},
+  title  = {Terse-Micro: A 423M-Parameter Ternary-Weight Language Model Trained From Scratch for \$150},
   author = {Romero Chisco, Michelangelo},
   year   = {2026},
   note   = {Apache-2.0. github.com/michelangeloromerochisco/micro-terse}

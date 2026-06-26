@@ -1,4 +1,4 @@
-# Terse-Micro: A 423M-Parameter Ternary-Weight Language Model Trained From Scratch for $127
+# Terse-Micro: A 423M-Parameter Ternary-Weight Language Model Trained From Scratch for $150
 
 **Michelangelo Romero Chisco**
 Independent researcher · 2026
@@ -8,7 +8,7 @@ Code: github.com/michelangeloromerochisco/micro-terse · License: Apache-2.0
 
 ## Abstract
 
-We present **Terse-Micro**, a 423M-parameter (≈320M active) ternary-weight language model with weights constrained to {−1, 0, +1}, trained entirely from scratch on 8 billion tokens for approximately **US$127** on a single 48 GB GPU. Terse-Micro is fully clean-room: its architecture and its ternary training operator are our own, derived from but not copied from prior 1-bit work. The model combines grouped-query attention, an auxiliary-loss-free mixture-of-experts, squared-ReLU gated feed-forward networks, query–key normalization, a multi-token-prediction head, and tied embeddings, and it quantizes **losslessly** to a 182 MB `TQ2_0` GGUF that runs on commodity CPUs with no GPU. We document the architecture, the from-scratch ternary recipe (pretraining → supervised fine-tuning → ORPO alignment), and an deliberately honest evaluation. The base model reaches a perplexity of **56.7** on held-out natural English and shows strong single-token factual recall — for example, "*…painted by Leonardo da*" → "*Vinci*" at 90% probability — while ORPO identity alignment measurably flips the model's self-identity preference from favouring a generic "ChatGPT" answer to favouring its own charter identity (mean log-probability margin **−1.81 → +0.90**). We are equally candid about the limits: at an 8B-token budget Terse-Micro is data-limited and is not a fluent conversational assistant. We position it as a reproducible proof-of-concept for sovereign, edge-deployable ternary language models trained from scratch on an individual's budget.
+We present **Terse-Micro**, a 423M-parameter (≈320M active) ternary-weight language model with weights constrained to {−1, 0, +1}, trained entirely from scratch on 8 billion tokens for approximately **US$150** on a single 48 GB GPU. Terse-Micro is fully clean-room: its architecture and its ternary training operator are our own, derived from but not copied from prior 1-bit work. The model combines grouped-query attention, an auxiliary-loss-free mixture-of-experts, squared-ReLU gated feed-forward networks, query–key normalization, a multi-token-prediction head, and tied embeddings, and it quantizes **losslessly** to a 182 MB `TQ2_0` GGUF that runs on commodity CPUs with no GPU. We document the architecture, the from-scratch ternary recipe (pretraining → supervised fine-tuning → ORPO alignment), and an deliberately honest evaluation. The base model reaches a perplexity of **56.7** on held-out natural English and shows strong single-token factual recall — for example, "*…painted by Leonardo da*" → "*Vinci*" at 90% probability — while ORPO identity alignment measurably flips the model's self-identity preference from favouring a generic "ChatGPT" answer to favouring its own charter identity (mean log-probability margin **−1.81 → +0.90**). We are equally candid about the limits: at an 8B-token budget Terse-Micro is data-limited and is not a fluent conversational assistant. We position it as a reproducible proof-of-concept for sovereign, edge-deployable ternary language models trained from scratch on an individual's budget.
 
 ---
 
@@ -20,11 +20,11 @@ Most public ternary results are either (a) fine-tunes that inherit a vendor's pr
 
 > *How capable a language model can a single person train from scratch, in clean-room ternary, on a hobbyist budget — and what is honestly true about the result?*
 
-Terse-Micro is our answer. It is a 423M-parameter ternary model trained for ~US$127 of rented GPU time, with an architecture and a ternary operator we wrote ourselves, and an evaluation that reports what the model *can* do (efficient deployment, factual recall, measurable alignment) without inflating what it cannot (fluent open-ended conversation, competitive benchmark scores).
+Terse-Micro is our answer. It is a 423M-parameter ternary model trained for ~US$150 of rented GPU time, with an architecture and a ternary operator we wrote ourselves, and an evaluation that reports what the model *can* do (efficient deployment, factual recall, measurable alignment) without inflating what it cannot (fluent open-ended conversation, competitive benchmark scores).
 
 **Contributions.**
 
-1. **A fully clean-room ternary language model** — own architecture, own straight-through ternary operator — reproducible end-to-end for ~$127 on one 48 GB GPU.
+1. **A fully clean-room ternary language model** — own architecture, own straight-through ternary operator — reproducible end-to-end for ~$150 on one 48 GB GPU.
 2. **An honest, *measurable* demonstration of identity alignment**: ORPO moves the model's self-identity preference by +2.7 nats even though free-generation remains weak, separating *what the model prefers* from *what it can fluently express*.
 3. **Evidence that a 182 MB, CPU-only model retains real world knowledge** at the single-token level (≈14/18 curated factual completions correct).
 4. **A reproducible recipe** — a full from-scratch ternary pipeline (pretraining → SFT → ORPO → GGUF) that an individual can run end to end.
@@ -96,7 +96,7 @@ After training, the ternary weights — being exactly {−1, 0, +1} — are repr
 
 Terse-Micro was pretrained on **8 B tokens** of filtered web text (FineWeb-grade) [Penedo et al. 2024] with the Llama-3.1 tokenizer. Optimization used AdamW (β = 0.9/0.95, weight decay 0.1), a peak learning rate of 3 × 10⁻⁴ decayed by cosine to 3 × 10⁻⁵ over 488,282 steps with 2,000 warmup steps, gradient clipping at 1.0, batch size 4 × sequence length 4096 (16,384 tokens/step), bf16, and gradient checkpointing. The total loss combined the main next-token cross-entropy with the MTP auxiliary at weight 0.1.
 
-Hardware was a single **RTX A6000 (48 GB)** rented on RunPod at roughly $0.49–0.54/hr, for ≈250 GPU-hours and a total cost of **≈US$127**. At 8 B tokens the model sees ~19 tokens/parameter — Chinchilla-reasonable, but, as Section 6 stresses, 1–3 orders of magnitude fewer tokens than the strong sub-1B models it is naturally compared against.
+Hardware was a single **RTX A6000 (48 GB)** rented on RunPod at roughly $0.55–0.60/hr, for ≈250 GPU-hours and a total cost of **≈US$150**. At 8 B tokens the model sees ~19 tokens/parameter — Chinchilla-reasonable, but, as Section 6 stresses, 1–3 orders of magnitude fewer tokens than the strong sub-1B models it is naturally compared against.
 
 ### 4.2 Supervised fine-tuning
 
@@ -106,7 +106,7 @@ We then ran 3 epochs of supervised fine-tuning on **44,558 ChatML conversations*
 
 Finally, one epoch of **ORPO** [Hong et al. 2024] on ≈3,500 preference pairs aligned the model's identity (its charter — who it is and who built it) and removed a set of unwanted default behaviours, using Adafactor at learning rate 1 × 10⁻⁵. ORPO is reference-free, so no second model was held in memory. Because preference pairs whose prompt fills the sequence length can yield empty response slices (and a NaN loss), we add guards that skip empty pairs and any non-finite loss or gradient before the optimizer step.
 
-The full pipeline — `pretrain → SFT → ORPO → ternary GGUF` — is fully automated and ran to completion on the rented instance, including recovery from a mid-run filesystem stall, within the $127 budget.
+The full pipeline — `pretrain → SFT → ORPO → ternary GGUF` — is fully automated and ran to completion on the rented instance, including recovery from a mid-run filesystem stall, within the $150 budget.
 
 ---
 
@@ -183,7 +183,7 @@ None of these caveats undercut the contribution. They define it: Terse-Micro sho
 
 ## 7. Conclusion
 
-Terse-Micro is a 423M-parameter clean-room ternary language model trained from scratch for ~US$127, deployable as a 182 MB CPU-only model. It is not a frontier system and we do not present it as one; it is a reproducible proof-of-concept whose value is *capability per megabyte and per joule on owned hardware*, plus a transparent account of what an extreme-budget ternary model does and does not do. The obvious levers for closing the quality gap while keeping the footprint advantage are more and better data, a smaller vocabulary, and distillation from a strong open teacher.
+Terse-Micro is a 423M-parameter clean-room ternary language model trained from scratch for ~US$150, deployable as a 182 MB CPU-only model. It is not a frontier system and we do not present it as one; it is a reproducible proof-of-concept whose value is *capability per megabyte and per joule on owned hardware*, plus a transparent account of what an extreme-budget ternary model does and does not do. The obvious levers for closing the quality gap while keeping the footprint advantage are more and better data, a smaller vocabulary, and distillation from a strong open teacher.
 
 ---
 
