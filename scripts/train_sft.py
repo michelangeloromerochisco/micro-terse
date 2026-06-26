@@ -2,7 +2,7 @@
 
 FULL fine-tuning (not LoRA): the fine-tune trains the ternary latent weights via
 the STE, so the result is a new set of ternary weights -> a single merged GGUF,
-with NO LoRA-merge rounding loss (avoids the Orchid/ternative problem).
+with NO LoRA-merge rounding loss.
 
 Loss is masked to the assistant response(s) (every non-assistant token gets label
 -100, which cross-entropy ignores). Multi-turn conversations are supported: every

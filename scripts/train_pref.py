@@ -1,7 +1,7 @@
 """Preference fine-tuning (DPO or ORPO) for a Micro-Terse checkpoint.
 
-Both are FULL fine-tuning -> a single merged ternary model (no LoRA, no Orchid
-re-quantization issue).
+Both are FULL fine-tuning -> a single merged ternary model (no LoRA, no
+re-quantization rounding issue).
   --method orpo : reference-free. loss = NLL(chosen) + lambda * odds-ratio term.
                   Lighter (no reference model); one combined align stage.
   --method dpo  : needs a frozen reference (a copy of the start checkpoint).

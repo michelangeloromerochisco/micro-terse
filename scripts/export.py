@@ -1,4 +1,4 @@
-"""GGUF export entry point: python scripts/export.py --ckpt <path> --config <cfg> --out orchid.gguf"""
+"""GGUF export entry point: python scripts/export.py --ckpt <path> --config <cfg> --out terse.gguf"""
 import argparse
 
 import yaml

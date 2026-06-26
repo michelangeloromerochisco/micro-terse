@@ -16,8 +16,8 @@
 
 **Micro-Terse** is a 423M-parameter (≈320M active) **ternary-weight** language model trained from
 scratch in pure PyTorch on a single GPU. Its weights are constrained to `{-1, 0, +1}` (≈1.58 bits),
-so the model quantizes **losslessly** to a **182 MB `TQ2_0` GGUF** that runs on a commodity CPU
-with no GPU. The whole run — pretraining, SFT, and ORPO — cost about **$150**.
+so they pack **exactly** into `TQ2_0`. The released **182 MB** GGUF — ternary weights lossless, the
+tied embedding in Q6_K — runs on a commodity CPU with no GPU. The whole run — pretraining, SFT, and ORPO — cost about **$150**.
 
 It is a research proof-of-concept, **not** a production assistant. At an 8B-token budget the model
 is data-limited: fluent for a clause or two, near chance on knowledge benchmarks. The point is
@@ -28,7 +28,7 @@ train and run on owned hardware.
 
 - **Ternary weights `{-1, 0, +1}`** on all internal projections — matmuls reduce to add/subtract.
 - **Clean-room architecture and ternary operator** — derived from, but not copied from, prior 1-bit work.
-- **Lossless 182 MB GGUF** — `TQ2_0` packing is exact because the weights are already `{-1, 0, +1}`.
+- **182 MB GGUF** — `TQ2_0` packs the ternary weights exactly (they're already `{-1, 0, +1}`); the tied embedding is Q6_K.
 - **CPU-only inference** via a small `llama.cpp` fork (custom `terse` architecture).
 - **Trained from scratch for ≈$150** on a single RTX A6000 (48 GB).
 

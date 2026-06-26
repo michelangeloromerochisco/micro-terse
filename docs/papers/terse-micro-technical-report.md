@@ -8,7 +8,7 @@ Code: github.com/michelangeloromerochisco/micro-terse · License: Apache-2.0
 
 ## Abstract
 
-We present **Terse-Micro**, a 423M-parameter (≈320M active) ternary-weight language model with weights constrained to {−1, 0, +1}, trained entirely from scratch on 8 billion tokens for approximately **US$150** on a single 48 GB GPU. Terse-Micro is fully clean-room: its architecture and its ternary training operator are our own, derived from but not copied from prior 1-bit work. The model combines grouped-query attention, an auxiliary-loss-free mixture-of-experts, squared-ReLU gated feed-forward networks, query–key normalization, a multi-token-prediction head, and tied embeddings, and it quantizes **losslessly** to a 182 MB `TQ2_0` GGUF that runs on commodity CPUs with no GPU. We document the architecture, the from-scratch ternary recipe (pretraining → supervised fine-tuning → ORPO alignment), and an deliberately honest evaluation. The base model reaches a perplexity of **56.7** on held-out natural English and shows strong single-token factual recall — for example, "*…painted by Leonardo da*" → "*Vinci*" at 90% probability — while ORPO identity alignment measurably flips the model's self-identity preference from favouring a generic "ChatGPT" answer to favouring its own charter identity (mean log-probability margin **−1.81 → +0.90**). We are equally candid about the limits: at an 8B-token budget Terse-Micro is data-limited and is not a fluent conversational assistant. We position it as a reproducible proof-of-concept for sovereign, edge-deployable ternary language models trained from scratch on an individual's budget.
+We present **Terse-Micro**, a 423M-parameter (≈320M active) ternary-weight language model with weights constrained to {−1, 0, +1}, trained entirely from scratch on 8 billion tokens for approximately **US$150** on a single 48 GB GPU. Terse-Micro is fully clean-room: its architecture and its ternary training operator are our own, derived from but not copied from prior 1-bit work. The model combines grouped-query attention, an auxiliary-loss-free mixture-of-experts, squared-ReLU gated feed-forward networks, query–key normalization, a multi-token-prediction head, and tied embeddings, and it packs to a 182 MB `TQ2_0` GGUF — ternary weights losslessly, the tied embedding in `Q6_K` — that runs on commodity CPUs with no GPU. We document the architecture, the from-scratch ternary recipe (pretraining → supervised fine-tuning → ORPO alignment), and an deliberately honest evaluation. The base model reaches a perplexity of **56.7** on held-out natural English and shows strong single-token factual recall — for example, "*…painted by Leonardo da*" → "*Vinci*" at 90% probability — while ORPO identity alignment measurably flips the model's self-identity preference from favouring a generic "ChatGPT" answer to favouring its own charter identity (mean log-probability margin **−1.81 → +0.90**). We are equally candid about the limits: at an 8B-token budget Terse-Micro is data-limited and is not a fluent conversational assistant. We position it as a reproducible proof-of-concept for sovereign, edge-deployable ternary language models trained from scratch on an individual's budget.
 
 ---
 
@@ -86,7 +86,7 @@ We are explicit about one non-obvious property: because STE maintains full-preci
 
 ### 3.3 Export and quantized footprint
 
-After training, the ternary weights — being exactly {−1, 0, +1} — are represented losslessly in an F32 GGUF under a custom `terse` architecture in a fork of `llama.cpp`. That F32 file quantizes to `TQ2_0` (≈2 bits/weight packed) yielding a **≈182 MB** deployable model. Because the F32 representation is exact, no information is lost relative to the trained checkpoint; the `.pt` weights are reconstructable from the GGUF.
+After training, the ternary weights — being exactly {−1, 0, +1} — are represented losslessly in an F32 GGUF under a custom `terse` architecture in a fork of `llama.cpp`; that F32 container is exact, so the `.pt` weights are reconstructable from it. The deployable model then packs the ternary weights into `TQ2_0` (≈2 bits/weight, still exact for `{−1, 0, +1}`) and quantizes the tied token embedding — ≈31% of parameters — to `Q6_K`, yielding a **≈182 MB** file. The embedding is the only lossy part; the ternary weights are preserved exactly.
 
 ---
 
@@ -165,7 +165,7 @@ Terse-Micro deploys as a **182 MB** `TQ2_0` GGUF and runs on a commodity CPU wit
 
 We want this section read as carefully as the results.
 
-**Terse-Micro is data-limited, not architecture-limited.** Eight billion tokens is 1–3 orders of magnitude fewer than the data behind strong sub-1B peers (Pythia-410M ≈300 B; SmolLM2-360M ≈4 T; Qwen2.5-0.5B ≈18 T). Small models are good *because* they are massively over-trained; Terse-Micro is at a GPT-2-era data budget *by design*, to honour the ~$130 cost cap. Its realistic capability is **GPT-2-medium/large to Pythia-410M territory**: fluent for a clause or two, then prone to drift and hallucination in open generation.
+**Terse-Micro is data-limited, not architecture-limited.** Eight billion tokens is 1–3 orders of magnitude fewer than the data behind strong sub-1B peers (Pythia-410M ≈300 B; SmolLM2-360M ≈4 T; Qwen2.5-0.5B ≈18 T). Small models are good *because* they are massively over-trained; Terse-Micro is at a GPT-2-era data budget *by design*, to honour a tight hobbyist cost budget. Its realistic capability is **GPT-2-medium/large to Pythia-410M territory**: fluent for a clause or two, then prone to drift and hallucination in open generation.
 
 **Ternary compounds the data problem.** Ternary weights converge more slowly than fp16 and want *more* data, not less; pairing the most data-hungry format with the smallest data budget is a double penalty we accepted to keep the run cheap and the footprint tiny.
 
@@ -177,7 +177,7 @@ We want this section read as carefully as the results.
 
 **Benchmarks pending.** A standard logprob benchmark battery (HellaSwag/PIQA/ARC/WinoGrande/MMLU) is prepared but not yet run; we will report it separately and expect knowledge suites near chance.
 
-None of these caveats undercut the contribution. They define it: Terse-Micro shows that the *full machinery* of a modern small LLM — clean-room ternary, MoE, MTP, alignment, lossless quantization, CPU deployment — can be built and run end-to-end by one person for the price of a video game, and that even at this budget the result retains measurable knowledge and alignment.
+None of these caveats undercut the contribution. They define it: Terse-Micro shows that the *full machinery* of a modern small LLM — clean-room ternary, MoE, MTP, alignment, ternary quantization, CPU deployment — can be built and run end-to-end by one person for the price of a video game, and that even at this budget the result retains measurable knowledge and alignment.
 
 ---
 

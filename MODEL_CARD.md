@@ -1,7 +1,7 @@
 # Model Card — Terse-Micro
 
 > A 423M-parameter, ternary-weight {−1, 0, +1} language model trained from scratch for ~$150,
-> deployable as a 182 MB CPU-only model. First tier of the **Terse family**.
+> deployable as a 182 MB CPU-only model.
 
 - **Developer:** Michelangelo Romero Chisco (independent), 2026
 - **Model type:** Decoder-only transformer, ternary weights, mixture-of-experts
@@ -55,7 +55,7 @@ Standard academic benchmarks (MMLU/HellaSwag/ARC) were **not** run; at this data
 
 - Research and education on ternary / extreme-efficiency LLMs.
 - On-device / offline, CPU-only deployment where footprint and energy dominate.
-- A reproducible baseline and warm-start seed for larger Terse tiers.
+- A reproducible baseline and starting point for further work on from-scratch ternary models.
 
 ## Out-of-scope / limitations
 
