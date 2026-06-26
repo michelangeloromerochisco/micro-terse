@@ -54,7 +54,7 @@ Flow: `embed_tokens → 12× TerseBlock → final RMSNorm → tied LM head`, plu
 | FFN | 2816 intermediate, squared-ReLU gated (~90% activation sparsity) |
 | MoE | 4 experts, top-2, odd layers; aux-loss-free bias-EMA balancing |
 | Ternary scope | Q/K/V/O, gate/up/down; embeddings, LM head, norms, router, biases stay full precision |
-| Ternary operator | sign-with-threshold forward; FOGZO-shaped STE backward, learnable per-layer temperature |
+| Ternary operator | sign-with-threshold forward; FOGZO-shaped STE backward, per-layer temperature τ (fixed at 1.0) |
 | Context | 4096 |
 
 Full rationale is in the [technical report](docs/papers/terse-micro-technical-report.md).

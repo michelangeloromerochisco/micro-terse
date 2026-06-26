@@ -26,7 +26,7 @@
 | MTP | 1 head (predicts +2; training only, dropped at inference) |
 | Embeddings | tied input/output; full precision (~31% of params) |
 | Ternary scope | internal projections only (Q/K/V/O, gate/up/down); norms/router/bias full precision |
-| Ternary operator | sign-with-threshold forward; FOGZO-shaped STE backward, learnable per-layer τ |
+| Ternary operator | sign-with-threshold forward; FOGZO-shaped STE backward, per-layer τ (fixed at 1.0) |
 | Context | 4096 |
 
 Config: `configs/micro-trained.yaml` (the as-trained 423M; `configs/micro.yaml` is a stale 1.06B planning spec — do not use it for the released weights).

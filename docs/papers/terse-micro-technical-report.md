@@ -80,7 +80,7 @@ On the **forward** pass, each ternary linear quantizes its latent weight `W` wit
 scale = 1 − tanh²(W_latent / τ)
 ```
 
-where `τ` is a **learnable per-layer temperature** (initialized to 1.0, clamped to [0.01, 10]). This down-weights gradient flow to weights that have saturated far from the quantization boundary while preserving it near the decision region, which we found stabilizes ternary convergence.
+where `τ` is a per-layer temperature — a parameter initialized to 1.0 and clamped to [0.01, 10], though in the current operator it receives no gradient and remains fixed at 1.0. The FOGZO scale down-weights gradient flow to weights that have saturated far from the quantization boundary while preserving it near the decision region, which we found stabilizes ternary convergence.
 
 We are explicit about one non-obvious property: because STE maintains full-precision latent masters, **ternary training does not reduce training-time memory** — the footprint and energy wins are realized only at inference, after the latent weights are discarded and the ternary weights are packed. Ternary is an *inference and deployment* advantage, not a training-memory one.
 
