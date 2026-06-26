@@ -41,7 +41,7 @@ Config: `configs/micro-trained.yaml` (the as-trained 423M; `configs/micro.yaml` 
 | Hardware | 1× RTX A6000 48 GB (RunPod), ≈250 GPU-hours, **≈$150 total** |
 | Export | F32 GGUF (lossless for ternary) → `TQ2_0` ≈ **182 MB** |
 
-Released checkpoints: `terse-micro-base.gguf` (pretrained LM), `terse-micro-sft.gguf` (chat), `terse-micro-orpo.gguf` (identity-aligned).
+Released checkpoints (on Hugging Face): `terse-micro-base.TQ2_0.gguf` (pretrained LM), `terse-micro-sft.TQ2_0.gguf` (chat), `terse-micro-orpo.TQ2_0.gguf` (identity-aligned).
 
 ## Evaluation (measured)
 
@@ -67,7 +67,7 @@ Standard academic benchmarks (MMLU/HellaSwag/ARC) were **not** run; at this data
 
 ## How to run
 
-See the [README](README.md). In short: serve `terse-micro-sft.gguf` (chat), with `terse-micro-orpo.gguf` for identity-aligned responses and `terse-micro-base.gguf` for next-token prediction, all on CPU.
+See the [README](README.md). In short: serve `terse-micro-sft.TQ2_0.gguf` (chat), with `terse-micro-orpo.TQ2_0.gguf` for identity-aligned responses and `terse-micro-base.TQ2_0.gguf` for next-token prediction, all on CPU.
 
 ## Citation
 

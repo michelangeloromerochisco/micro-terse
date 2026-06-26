@@ -74,7 +74,7 @@ A consequence worth stating plainly: the 128K-token embedding table accounts for
 
 Only the internal projection matrices — attention Q/K/V/O and the FFN gate/up/down — are ternary. Embeddings, the (tied) LM head, all norms, the MoE router gate, biases, and per-layer temperatures remain full precision. This keeps the numerically sensitive parts exact while making the bulk of the compute multiply-free.
 
-On the **forward** pass, each ternary linear quantizes its latent weight `W` with a sign-and-threshold rule (absmean-scaled), producing `W_t ∈ {−1, 0, +1}`. On the **backward** pass we use a straight-through estimator with a *FOGZO-shaped* gradient scale
+On the **forward** pass, each ternary linear quantizes its latent weight `W` with a sign-and-threshold rule: weights whose magnitude is below the per-tensor absolute-mean `mean(|W|)` are set to 0 and the rest to ±1 by sign, with **no magnitude scaling** — the output is exactly `W_t ∈ {−1, 0, +1}` (which is what makes the later `TQ2_0` packing exact). On the **backward** pass we use a straight-through estimator with a *FOGZO-shaped* gradient scale
 
 ```
 scale = 1 − tanh²(W_latent / τ)
